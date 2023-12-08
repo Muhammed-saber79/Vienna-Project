@@ -27,6 +27,9 @@ Route::group([
 ], function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('index');
     Route::post('/getUserLocation/{client}', [AdminController::class, 'getUserLocation'])->name('getUserLocation');
+
+    Route::put('/updateUser/{client}', [AdminController::class, 'updateUser'])->name('client.update');
+    Route::delete('/deleteUser/{client}', [AdminController::class, 'destroyUser'])->name('client.destroy');
 });
 
 Route::middleware('auth')->group(function () {

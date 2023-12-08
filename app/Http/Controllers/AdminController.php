@@ -37,33 +37,30 @@ class AdminController extends Controller
         return redirect()->route('dashboard.index')->with('success', 'Get user\'s location successfully.');
     }
 
-    public function create()
+    public function updateUser(Request $request, Client $client)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'min:3'],
+            'email' => ['required', 'email', 'unique:clients,email,' . $client->id],
+        ]);
+
+        try {
+            $client->update( $request->only('name', 'email') );
+
+            return redirect()->route('dashboard.index')->with('success', 'User\'s data updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.index')->with('error', 'Error, While trying to update user\'s data...!');
+        }  
     }
 
-    public function store(Request $request)
+    public function destroyUser(Client $client)
     {
-        //
-    }
+        try {
+            $client->delete();
 
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
+            return redirect()->route('dashboard.index')->with('success', 'User deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.index')->with('error', 'Error, While trying to delete this user...!');
+        } 
     }
 }
